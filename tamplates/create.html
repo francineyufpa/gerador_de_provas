@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Criar Nova Questão</h1>
+<form method="POST">
+    <div class="form-group">
+        <label for="title">Título da Questão</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+    <div class="form-group">
+        <label for="question_type">Tipo de Questão</label>
+        <select class="form-control" id="question_type" name="question_type" required>
+            <option value="multiple">Múltipla Escolha</option>
+            <option value="likert">Escala Likert</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="num_options">Número de Opções</label>
+        <input type="number" class="form-control" id="num_options" name="num_options" min="2" value="2" required>
+    </div>
+    <div id="options-container">
+        <!-- As opções serão adicionadas dinamicamente aqui -->
+    </div>
+    <div class="form-group">
+        <label for="answer">Resposta</label>
+        <input type="text" class="form-control" id="answer" name="answer">
+    </div>
+    <button type="submit" class="btn btn-primary">Criar</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Voltar</a>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const numOptionsInput = document.getElementById('num_options');
+    const optionsContainer = document.getElementById('options-container');
+    const questionTypeSelect = document.getElementById('question_type');
+
+    function updateOptions() {
+        const numOptions = parseInt(numOptionsInput.value);
+        optionsContainer.innerHTML = '';
+        for (let i = 0; i < numOptions; i++) {
+            const optionDiv = document.createElement('div');
+            optionDiv.classList.add('form-group');
+            optionDiv.innerHTML = `
+                <label for="option${i + 1}">Opção ${String.fromCharCode(97 + i)}</label>
+                <input type="text" class="form-control" id="option${i + 1}" name="options" required>
+            `;
+            optionsContainer.appendChild(optionDiv);
+        }
+    }
+
+    function handleQuestionTypeChange() {
+        if (questionTypeSelect.value === 'likert') {
+            document.getElementById('answer').style.display = 'none';
+        } else {
+            document.getElementById('answer').style.display = 'block';
+        }
+    }
+
+    numOptionsInput.addEventListener('input', updateOptions);
+    questionTypeSelect.addEventListener('change', handleQuestionTypeChange);
+
+    // Inicializa com o número padrão de opções
+    updateOptions();
+    handleQuestionTypeChange();
+});
+</script>
+{% endblock %}

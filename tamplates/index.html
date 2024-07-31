@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Lista de Questões</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Opções</th>
+            <th>Gabarito</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for question in questions %}
+        <tr>
+            <td>{{ loop.index0 }}</td>
+            <td>{{ question.title }}</td>
+            <td>{{ question.options | join(', ') }}</td>
+            <td>{{ question.answer }}</td>
+            <td>
+                <a href="{{ url_for('update', id=loop.index0) }}" class="btn btn-primary">Editar</a>
+                <a href="{{ url_for('delete', id=loop.index0) }}" class="btn btn-danger">Deletar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('create') }}" class="btn btn-success">Adicionar Nova Questão</a>
+<a href="{{ url_for('view') }}" class="btn btn-info">Visualizar Questionário</a>
+{% endblock %}

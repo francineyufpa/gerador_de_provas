@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Visualizar Questionário</h1>
+{% for question in questions %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ loop.index }}. {{ question.title }}</h5>
+            <ul>
+                {% for option in question.options %}
+                    <li>{{ loop.index0 | number_to_letter }}. {{ option }}</li>
+                {% endfor %}
+            </ul>
+            {% if question.type == 'likert' %}
+                <p><strong>Gabarito:</strong> {{ question.answer }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+<a href="{{ url_for('index') }}" class="btn btn-secondary">Voltar</a>
+{% endblock %}
